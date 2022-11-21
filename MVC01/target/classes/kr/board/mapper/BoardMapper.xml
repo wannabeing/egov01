@@ -9,4 +9,12 @@
 		INSERT INTO board(title, content, writer)
 		VALUES(#{title}, #{content}, #{writer})
 	</insert>
+	
+	<select id="BoardDetail" resultType="kr.board.entity.Board">
+		select * from board where idx=#{idx}
+	</select>
+	
+	<delete id="boardDel">
+		delete from board where idx=#{idx}
+	</delete>
 </mapper>

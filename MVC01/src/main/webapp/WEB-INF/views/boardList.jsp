@@ -27,13 +27,13 @@
             <td>작성일</td>
             <td>조회수</td>
           </tr>
-          <c:forEach var="vo" items="${list}">
+          <c:forEach var="board" items="${list}">
            <tr>
-            <td>${vo.idx}</td>
-            <td><a href="boardContent.do?idx=${vo.idx}">${vo.title}</a></td>
-            <td>${vo.writer}</td>
-            <td>${fn:split(vo.indate," ")[0]}</td>
-            <td>${vo.count}</td>
+            <td>${board.idx}</td>
+            <td><a href="boardDetail.do/${board.idx}">${board.title}</a></td>
+            <td>${board.writer}</td>
+            <td>${fn:split(board.indate," ")[0]}</td>
+            <td>${board.count}</td>
            </tr>
           </c:forEach>
        	</table>
