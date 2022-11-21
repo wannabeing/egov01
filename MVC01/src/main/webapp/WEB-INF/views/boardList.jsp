@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>boardList</title>
+  <title>MVC01 | boardList</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -15,7 +15,7 @@
 <body> 
  
 <div class="container">
-  <h2>Basic Panel</h2>
+  <h2>Board List</h2>
   <div class="panel panel-default">
     <div class="panel-heading">Header</div>
     <div class="panel-body">
@@ -37,6 +37,7 @@
            </tr>
           </c:forEach>
        	</table>
+       	<a href="boardForm.do" class="btn btn-primary btn-sm">글쓰기</a>
        </div>
     <div class="panel-footer">Footer</div>
   </div>
