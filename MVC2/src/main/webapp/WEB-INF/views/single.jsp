@@ -18,7 +18,7 @@
   	function loadList(){
   		// 서버와 통신 : 게시판 리스트 가져오기
     	$.ajax({
-    		url : "boardList.do",
+    		url : "board/list",
     		type : "GET",
     		dataType : "json",
     		success : makeView,
@@ -46,7 +46,7 @@
 	       	listHtml+="<tr id='board"+obj.idx+"' style='display:none'>";
 	       	listHtml+="<td>내용</td>";
 	       	listHtml+="<td colspan='4'>";
-	       	listHtml+="<textarea id='content"+obj.idx+"' readonly rows='7' class='form-control'>"+obj.content+"</textarea>";
+	       	listHtml+="<textarea id='content"+obj.idx+"' readonly rows='7' class='form-control'></textarea>";
 	       	listHtml+="<br/>";
 	       	listHtml+="<span id='editBtn"+obj.idx+"'><button class='btn btn-primary btn-sm' onclick='editForm("+obj.idx+")'>수정</button></span>&nbsp;";
 	       	listHtml+="<button class='btn btn-danger btn-sm' onclick='delBoard("+obj.idx+")'>삭제</button>";        	 
@@ -73,10 +73,10 @@
   	}
   	function submitForm(){
   		const formData = $("#form").serialize();
-  		
+ 
   		// 서버와 통신 : 게시판 리스트 가져오기
     	$.ajax({
-    		url : "createBoard.do",
+    		url : "board/create",
     		type : "POST",
     		data : formData,
     		success : loadList,
@@ -87,6 +87,19 @@
   	}
   	function detailBoard(idx){
   		if($("#board"+idx).css("display") == "none"){
+  			// 서버와 통신 : 상세보기 클릭시 게시판정보 가져오기
+  	    	$.ajax({
+  	    		url : "board/"+idx,
+  	    		type : "GET",
+  	    		dataType: "JSON",
+  	    		success : function(board){
+  	    			$("#cnt"+idx).val(board.count);
+  	    			$("#content"+idx).val(board.content);
+  	    			
+  	    		},
+  	    		error : function(e){ console.log(e);  }    		
+  	    	});
+  		
   			$("#board"+idx).css("display", "table-row");
   		}else{
   			$("#board"+idx).css("display", "none");
@@ -95,9 +108,8 @@
   	function delBoard(idx){
   		// 서버와 통신 : 삭제 성공시 게시판 리스트 가져오기
     	$.ajax({
-    		url : "delBoard.do",
-    		type : "POST",
-    		data : {idx},
+    		url : "board/"+idx,
+    		type : "DELETE",
     		success : loadList,
     		error : function(e){ console.log(e);  }    		
     	});
@@ -122,9 +134,10 @@
   		};
   		// 서버와 통신 : 삭제 성공시 게시판 리스트 가져오기
   		$.ajax({
-    		url : "editBoard.do",
-    		type : "POST",
-    		data : editData,
+    		url : "board/edit",
+    		type : "PUT",
+    		contentType:'application/json;charset=utf-8',
+    		data : JSON.stringify(editData),
     		success : loadList,
     		error : function(e){ console.log(e); }
     	});
@@ -139,7 +152,7 @@
     <div class="panel-heading">A Basic 1</div>
     <div id="view" class="panel-body"></div>
     <div  class="panel-body">
-    <form id="form" action="boardCreate.do" method="post">
+    <form id="form" action="board/create" method="post">
       <table class="table">
          <tr>
            <td>제목</td>
