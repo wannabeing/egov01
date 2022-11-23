@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.board.mapper.BoardMapper">
+	<select id="getLists" resultType="kr.board.entity.Board">
+		SELECT * FROM board ORDER BY idx desc
+	</select>
+	
+	<insert id="boardCreate" parameterType="kr.board.entity.Board" >
+		INSERT INTO board(title, content, writer)
+		VALUES(#{title}, #{content}, #{writer})
+	</insert>
+	
+	<select id="BoardDetail" resultType="kr.board.entity.Board">
+		select * from board where idx=#{idx}
+	</select>
+	
+	<delete id="boardDel">
+		delete from board where idx=#{idx}
+	</delete>
+</mapper>
