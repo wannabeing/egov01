@@ -37,29 +37,97 @@
 	   	$.each(data, function(index, obj){ // obj={"idx":5,"title":"게시판"~~ }
 	   		listHtml+="<tr>";
 	       	listHtml+="<td>"+obj.idx+"</td>";
-	       	listHtml+="<td id='t"+obj.idx+"'><a href='javascript:goContent("+obj.idx+")'>"+obj.title+"</a></td>";
+	       	listHtml+="<td id='title"+obj.idx+"'><a href='javascript:detailBoard("+obj.idx+")'>"+obj.title+"</a></td>";
 	       	listHtml+="<td>"+obj.writer+"</td>";
 	       	listHtml+="<td>"+obj.indate.split(' ')[0]+"</td>";
 	       	listHtml+="<td id='cnt"+obj.idx+"'>"+obj.count+"</td>";
 	       	listHtml+="</tr>";
 	       	 
-	       	listHtml+="<tr id='c"+obj.idx+"' style='display:none'>";
+	       	listHtml+="<tr id='board"+obj.idx+"' style='display:none'>";
 	       	listHtml+="<td>내용</td>";
 	       	listHtml+="<td colspan='4'>";
-	       	listHtml+="<textarea id='ta"+obj.idx+"' readonly rows='7' class='form-control'></textarea>";
+	       	listHtml+="<textarea id='content"+obj.idx+"' readonly rows='7' class='form-control'>"+obj.content+"</textarea>";
 	       	listHtml+="<br/>";
-	       	listHtml+="<span id='ub"+obj.idx+"'><button class='btn btn-success btn-sm' onclick='goUpdateForm("+obj.idx+")'>수정화면</button></span>&nbsp;";
-	       	listHtml+="<button class='btn btn-warning btn-sm' onclick='goDelete("+obj.idx+")'>삭제</button>";        	 
+	       	listHtml+="<span id='editBtn"+obj.idx+"'><button class='btn btn-primary btn-sm' onclick='editForm("+obj.idx+")'>수정</button></span>&nbsp;";
+	       	listHtml+="<button class='btn btn-danger btn-sm' onclick='delBoard("+obj.idx+")'>삭제</button>";        	 
 	       	listHtml+="</td>";
 	       	listHtml+="</tr>";
    	 	});
 	   	listHtml+="<tr>";
 	   	listHtml+="<td colspan='5'>";
-	   	listHtml+="<button class='btn btn-primary btn-sm' onclick='goForm()'>글쓰기</button>";
+	   	listHtml+="<button class='btn btn-primary btn-sm' onclick='viewForm()'>글쓰기</button>";
 	   	listHtml+="</td>";
 	   	listHtml+="</tr>";
 	   	listHtml+="</table>";
 	   	$("#view").html(listHtml);
+	   	$("#view").css("display","block");
+     	$("#form").css("display","none"); 
+  	}
+  	function viewForm(){
+  		$("#view").css("display","none");
+  		$("#form").css("display", "block");
+  	}
+  	function backList(){
+  		$("#view").css("display","block");
+     	$("#form").css("display","none");
+  	}
+  	function submitForm(){
+  		const formData = $("#form").serialize();
+  		
+  		// 서버와 통신 : 게시판 리스트 가져오기
+    	$.ajax({
+    		url : "createBoard.do",
+    		type : "POST",
+    		data : formData,
+    		success : loadList,
+    		error : function(e){ console.log(e);  }    		
+    	});
+  		// 폼 초기화 
+  		$("#resetBtn").trigger("click");
+  	}
+  	function detailBoard(idx){
+  		if($("#board"+idx).css("display") == "none"){
+  			$("#board"+idx).css("display", "table-row");
+  		}else{
+  			$("#board"+idx).css("display", "none");
+  		}
+  	}
+  	function delBoard(idx){
+  		// 서버와 통신 : 삭제 성공시 게시판 리스트 가져오기
+    	$.ajax({
+    		url : "delBoard.do",
+    		type : "POST",
+    		data : {idx},
+    		success : loadList,
+    		error : function(e){ console.log(e);  }    		
+    	});
+  	}
+  	function editForm(idx){
+  		$("#content"+idx).attr("readonly", false); // content 수정 가능 
+  		
+  		const titleVal = $("#title"+idx).text();
+  		const newInput = "<input type='text' id='editTitle"+idx+"' class='form-control' value='"+titleVal+"'/>";
+  		$("#title"+idx).html(newInput);
+  		
+  		const newEditBtn="<button class='btn btn-primary btn-sm' onclick='editBoard("+idx+")'>수정</button>";
+  		$("#editBtn"+idx).html(newEditBtn);
+  	}
+  	function editBoard(idx){
+		const title = $("#editTitle"+idx).val();
+  		const content = $("#content"+idx).val();
+  		const editData = {
+  				idx,
+  				title,
+  				content,
+  		};
+  		// 서버와 통신 : 삭제 성공시 게시판 리스트 가져오기
+  		$.ajax({
+    		url : "editBoard.do",
+    		type : "POST",
+    		data : editData,
+    		success : loadList,
+    		error : function(e){ console.log(e); }
+    	});
   	}
   </script>
 </head>
@@ -69,9 +137,37 @@
   <h2>MVC02</h2>
   <div class="panel panel-default">
     <div class="panel-heading">A Basic 1</div>
-    <div id="view" class="panel-body">
-       </div>
-    <div class="panel-footer">A Basic 3</div>
+    <div id="view" class="panel-body"></div>
+    <div  class="panel-body">
+    <form id="form" action="boardCreate.do" method="post">
+      <table class="table">
+         <tr>
+           <td>제목</td>
+           <td><input type="text" id="title" name="title" class="form-control"/></td>
+         </tr>
+         <tr>
+           <td>내용</td>
+           <td><textarea rows="7" class="form-control" id="content" name="content"></textarea> </td>
+         </tr>
+         <tr>
+           <td>작성자</td>
+           <td><input type="text" name="writer" id="writer" class="form-control"/></td>
+         </tr>
+         <tr>
+           
+         <tr>
+         <td colspan="2" align="left">
+               <button type="button" class="btn btn-info btn-sm" onclick="backList()">뒤로가기</button>
+           </td>
+           <td colspan="2" align="right">
+               <button type="button" class="btn btn-primary btn-sm" onClick="submitForm()">등록</button>
+               <button type="reset" class="btn btn-warning btn-sm" id="resetBtn">취소</button>
+           </td>
+         </tr>
+      </table>
+     </form>
+    </div>
+    <div class="panel-footer">Ad Basic 3</div>
   </div>
 </div>
 

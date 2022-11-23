@@ -30,5 +30,20 @@ public class BoardController {
 		List<Board> list = boardMapper.getLists();
 		return list; // @ResponseBody를 통하여 json형태로 return
 	}
+	@PostMapping("/createBoard.do")
+	public @ResponseBody void createBoard(Board paramBoard) {
+		boardMapper.boardCreate(paramBoard);
+		// return이 없으니, 제어권을 넘긴다.
+	}
+	@PostMapping("/delBoard.do")
+	public @ResponseBody void delBoard(int idx) {
+		boardMapper.boardDel(idx);
+		// return이 없으니, 제어권을 넘긴다. 
+	}
+	@PostMapping("/editBoard.do")
+	public @ResponseBody void editBoard(Board editBoard) {
+		boardMapper.boardUpdate(editBoard);
+		// return이 없으니, 제어권을 넘긴다. 
+	}
 	
 }
