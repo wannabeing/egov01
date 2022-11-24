@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.board.mapper.UserMapper">
+	<select id="userCheck" resultType="kr.board.entity.User">
+		select * from user where userId=#{userId}
+	</select>
+	
+	<insert id="userRegister" parameterType="kr.board.entity.User">
+		insert into 
+		user(userId, pw, name, age, gender, email, profile)
+		values(#{userId}, #{pw}, #{name}, #{age}, #{gender}, #{email}, #{profile})
+	</insert>
+</mapper>

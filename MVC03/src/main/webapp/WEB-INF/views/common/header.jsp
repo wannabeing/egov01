@@ -23,7 +23,7 @@
       <c:choose>
       	<c:when test="${empty userInfo}">
       		<ul class="nav navbar-nav navbar-right">
-		        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+		        <li><a href="${contextPath}/signup.do"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
 		        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
 	      </ul>
       	</c:when>
