@@ -1,8 +1,4 @@
 # Egov01 (전자정부프레임워크를 이용한 스프링 프로젝트)
-
-**Express**를 사용한 서버사이드 웹 사이트입니다.<br>
-[velog](https://velog.io/@wannabeing/alfl)에서도 볼 수 있습니다.
-
 <br>
 
 ---
