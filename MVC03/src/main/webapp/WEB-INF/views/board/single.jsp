@@ -145,7 +145,7 @@
   </script>
 </head>
 <body> 
- 
+ <jsp:include page="../common/header.jsp"/>
 <div class="container">
   <h2>MVC03</h2>
   <div class="panel panel-default">

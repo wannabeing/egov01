@@ -20,7 +20,11 @@ public class BoardController {
 	
 	@RequestMapping("/")
 	public String main() {
-		return "single";
+		return "index";
+	}
+	@RequestMapping("/board")
+	public String board() {
+		return "board/single";
 	}
 	
 }
